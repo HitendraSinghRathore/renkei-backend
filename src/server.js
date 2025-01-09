@@ -14,7 +14,7 @@ app.get('/healthz', function healthRouter(_,res) {
 });
 
 app.get('/',function defaultRouter(_,res)  {
-    res.send('Hello from the other side!!!')
+    res.send('Hello from the other side!')
 });
 
 app.listen(PORT, function serverSetup() {
