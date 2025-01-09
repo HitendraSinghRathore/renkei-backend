@@ -4,11 +4,17 @@
   "description": "A simple backend to power the whiteboard tool to allow collaboration between users",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/server.js"
   },
   "keywords": [
     "javascript"
   ],
   "author": "Hitendra Singh",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "convict": "^6.2.4",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
 }
