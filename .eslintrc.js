@@ -4,7 +4,6 @@ module.exports = {
   ],
   plugins: [ 'node'],
   rules: {
-    semi: ['error', 'always'],
-    'no-process-exit': 'off' 
+    semi: ['error', 'always']
   }
 };
