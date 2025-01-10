@@ -20,6 +20,12 @@ const config = convict({
     format: 'port',
     default: 3000,
     env: 'PORT'
+  },
+  mongoDbURI: {
+    doc: 'The mongodb URI to connect to.',
+    format: String,
+    default: 'mongodb://localhost:27017',
+    env: 'MONGODB_URI'
   }
 });
 
