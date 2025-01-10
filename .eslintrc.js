@@ -1,11 +1,8 @@
 module.exports = {
   extends: [
-    'standard',
-    'plugin:import/recommended',
     'plugin:node/recommended',
-    'plugin:promise/recommended'
   ],
-  plugins: ['import', 'node', 'promise'],
+  plugins: [ 'node'],
   rules: {
     semi: ['error', 'always']
   }
