@@ -3,9 +3,8 @@ const config = require('../config');
 const syncDb = async function () {
     try {
         await mongose.connect(config.get('mongoDbURI'), {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            autoIndex: true
+            autoIndex: true,
+            serverSelectionTimeoutMS: 5000 
         });
         console.log('DB connection completed.');
     } catch (err) {
@@ -25,7 +24,7 @@ const syncDb = async function () {
 };
 async function closeDb() {
     try {
-        await mongose.connection.close(false);
+        await mongose.connection.close();
         console.log('DB connection closed.');
     } catch (err) {
         console.error('Error closing DB connection:', err);
