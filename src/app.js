@@ -19,12 +19,14 @@ app.use(corsMiddleware);
 
 
 app.get('/healthz', function healthRouter (_, res) {
+  console.log('Healthz handler');
   const dbState = mongoose.connection.readyState;
   res.status(200).json({ status: 'OK' , dbState});
 });
 
-app.get('/', function defaultRouter (_, res) {
-  res.send('Hello from the other side!');
+app.use(function errorHandler(error, _, res) {
+  console.error('Unhandled error occured, in default error handler:%o', error.stack);
+  res.status(500).json({ error: error.message });
 });
 
 module.exports = app;
