@@ -8,6 +8,8 @@ const authRouter = require('./routes/authRoutes');
 const passport = require('passport');
 const app = express();
 
+require('./utils/passport');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

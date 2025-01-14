@@ -1,7 +1,7 @@
 const passport = require("passport");
 const User = require("../models/user");
 const { generateRefreshToken, generateAccessToken } = require("../utils/tokenUtils");
-
+const config = require('../config');
 async function signupController(req, res, next) {
    const { firstName, lastName, email, password, phone } = req.body;
    try {
@@ -84,10 +84,11 @@ async function logoutContoller(req, res,next) {
         next(err);
     }
 }
-function googleAuth() { 
-    return passport.authenticate('google', { scope: ['profile', 'email'], session: false  });
+function googleAuth(req,res,next) { 
+    return passport.authenticate('google', { scope: ['profile', 'email'] , session: false })(req,res,next);
 }
-function googleCallback(req, res, next) {
+function googleCallback(req, res, next) { 
+    console.log('Google callback called');
     passport.authenticate('google', { session: false }, async function(err, user) { 
         if(err) {
             console.log('Error occured in google callback %o', err);
