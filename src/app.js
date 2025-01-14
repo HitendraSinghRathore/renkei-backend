@@ -4,6 +4,7 @@ const corsMiddleware = require('./middlewares/cors');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');  
+const authRouter = require('./routes/authRoutes');
 const app = express();
 
 app.use(express.json());
@@ -16,7 +17,7 @@ app.use(corsMiddleware);
 
 
 
-
+app.use('/auth', authRouter);
 
 app.get('/healthz', function healthRouter (_, res) {
   console.log('Healthz handler');
