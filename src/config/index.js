@@ -26,6 +26,18 @@ const config = convict({
     format: String,
     default: 'mongodb://localhost:27017',
     env: 'MONGODB_URI'
+  },
+  jwtAuthSecret: {
+    doc: 'The secret used to sign the JWT tokens.',
+    format: String,
+    default: 'secret',
+    env: 'JWT_AUTH_SECRET'
+  },
+  jwtRefreshSecret: {
+    doc: 'The secret used to sign the JWT refresh tokens.',
+    format: String,
+    default: 'secret',
+    env: 'JWT_REFRESH_SECRET'
   }
 });
 

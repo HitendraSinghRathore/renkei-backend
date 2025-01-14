@@ -25,9 +25,14 @@ app.get('/healthz', function healthRouter (_, res) {
   res.status(200).json({ status: 'OK' , dbState});
 });
 
-app.use(function errorHandler(error, _, res) {
+app.use((_, res, next) => {
+  res.status(404).json({ msg: 'Route not found' });
+  next();
+});
+app.use(function errorHandler(error, _, res, next) {
   console.error('Unhandled error occured, in default error handler:%o', error.stack);
-  res.status(500).json({ error: error.message });
+  res.status(500).json({ error: 'Something went wrong' });
+  next();
 });
 
 module.exports = app;
