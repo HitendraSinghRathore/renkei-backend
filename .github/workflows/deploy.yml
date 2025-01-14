@@ -34,10 +34,8 @@ jobs:
         if: success()
         run: sleep 10
 
-      - name: Deploy to Render backend
-        uses: styfle/render-action@v2
+      - name: Trigger Render Deployment (using deployment hook)
         if: success()
-        with:
-          render_api_token: ${{ secrets.RENDER_API_TOKEN }}
-          service_name: renkei-backend
-          deployment_description: "Automatic deployment from GitHub Actions"
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
