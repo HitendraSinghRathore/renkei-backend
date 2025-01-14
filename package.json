@@ -12,6 +12,11 @@
   "keywords": [
     "javascript"
   ],
+  "husky": {
+  "hooks": {
+    "pre-commit": "lint-staged" 
+  }
+},
   "author": "Hitendra Singh",
   "license": "ISC",
   "dependencies": {
