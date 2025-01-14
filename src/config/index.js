@@ -39,7 +39,7 @@ const config = convict({
     default: 'secret',
     env: 'JWT_REFRESH_SECRET'
   }
-});
+})
 
 config.validate({ allowed: 'strict' });
 
