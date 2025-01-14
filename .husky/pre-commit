@@ -1,1 +1,1 @@
-eslint .
+npm run lint
