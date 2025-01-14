@@ -13,8 +13,8 @@
     "javascript"
   ],
   "husky": {
-  "hooks": {
-    "pre-commit": "lint-staged" 
+    "hooks": {
+      "pre-commit": "npm run lint" 
   }
 },
   "author": "Hitendra Singh",
