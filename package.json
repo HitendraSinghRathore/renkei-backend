@@ -14,9 +14,9 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint" 
-  }
-},
+      "pre-commit": "npm run lint"
+    }
+  },
   "author": "Hitendra Singh",
   "license": "ISC",
   "dependencies": {
@@ -29,7 +29,9 @@
     "express-validator": "^7.2.1",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.9.4"
+    "mongoose": "^8.9.4",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^8.57.1",

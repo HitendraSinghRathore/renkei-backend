@@ -38,6 +38,30 @@ const config = convict({
     format: String,
     default: 'secret',
     env: 'JWT_REFRESH_SECRET'
+  },
+  googleClientSecret: {
+    doc: 'The secret used to sign the JWT tokens.',
+    format: String,
+    default: 'secret',  
+    env: 'GOOGLE_CLIENT_SECRET'
+  },
+  googleClientSecret: {
+    doc: 'The secret used to sign the JWT tokens.',
+    format: String,
+    default: 'secret',  
+    env: 'GOOGLE_CLIENT_SECRET'
+  },
+  googleClientId: {
+    doc: 'The secret used to sign the JWT tokens.',
+    format: String,
+    default: '',  
+    env: 'GOOGLE_CLIENT_ID'
+  },
+  googleCallbackUrl: {
+    doc: 'Callback url to be used',
+    format: String,
+    default: '',
+    env: 'GOOGLE_CALLBACK_URL'
   }
 });
 

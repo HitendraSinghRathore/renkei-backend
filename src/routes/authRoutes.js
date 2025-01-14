@@ -11,6 +11,9 @@ authRouter.post('/signup', validationRules.signupRules(), validationMiddleware, 
 
 authRouter.post('/login', validationRules.loginRules(), validationMiddleware, authController.loginController);
 
+authRouter.get('/google', authController.googleAuth);
+authRouter.get('/google/callback', authController.googleCallback);
+
 authRouter.post('/logout',authMiddleware , authController.logoutContoller);
 
 

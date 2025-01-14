@@ -1,3 +1,4 @@
+const passport = require("passport");
 const User = require("../models/user");
 const { generateRefreshToken, generateAccessToken } = require("../utils/tokenUtils");
 
@@ -77,14 +78,53 @@ async function logoutContoller(req, res,next) {
         });
         console.log('User logged out successfully');
         return res.status(200).json({ msg: 'User logged out successfully' });
-        
+
     } catch(err) {
         console.error('Error occured in logout controller');
         next(err);
     }
 }
+function googleAuth() { 
+    return passport.authenticate('google', { scope: ['profile', 'email'], session: false  });
+}
+function googleCallback(req, res, next) {
+    passport.authenticate('google', { session: false }, async function(err, user) { 
+        if(err) {
+            console.log('Error occured in google callback %o', err);
+            return next(err);
+        }
+        if(!user) {
+            console.log('User not found in callback');
+            return res.status(401).json({ msg: 'User authenticaion failed' });
+        }
+        try {
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
+            user.refreshToken = {
+                token: refreshToken,
+                expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000)
+            };
+            await user.save();
+            console.log('User refresh token generated');
+            res.cookie('refreshToken', refreshToken, {
+                httpOnly: true,
+                secure: config.get('env') === 'production', 
+                sameSite: 'Strict',
+                maxAge: 6 * 60 * 60 * 1000, 
+              });
+            console.log('User logged in successfully');
+            return res.status(200).json({ msg: 'User logged in successfully', accessToken });
+
+        } catch (err) {
+            console.error('Error occured in generating access token %o', err);
+            return next(err);
+        }
+    })(req,res,next);
+}
 module.exports = {
     signupController,
     loginController,
-    logoutContoller
+    logoutContoller,
+    googleAuth,
+    googleCallback
 };
