@@ -29,3 +29,15 @@ jobs:
         run: |
           docker build -t ghcr.io/hitendrasinghrathore/hitendrasinghrathore/renkei-backend:latest -f Dockerfile .
           docker push ghcr.io/hitendrasinghrathore/hitendrasinghrathore/renkei-backend:latest
+      
+      - name: Wait after image push is done
+        if: success()
+        run: sleep 10
+
+      - name: Deploy to Render backend
+        uses: styfle/render-action@v2
+        if: success()
+        with:
+          render_api_token: ${{ secrets.RENDER_API_TOKEN }}
+          service_name: renkei-backend
+          deployment_description: "Automatic deployment from GitHub Actions"
