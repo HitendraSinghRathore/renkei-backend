@@ -57,7 +57,34 @@ async function loginController(req, res,next) {
     }
 }
 
+async function logoutContoller(req, res,next) {
+    const { user } = req;
+    if(!user) {
+        return res.status(401).json({ msg: 'User not logged in' });
+    }
+    try {
+        const user  = await User.findByIdAndDelete(user._id);
+        if(!user) {
+            return res.status(404).json({ msg: 'User not found' });
+        }
+        user.refreshToken = undefined;
+        await user.save();
+
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+        });
+        console.log('User logged out successfully');
+        return res.status(200).json({ msg: 'User logged out successfully' });
+        
+    } catch(err) {
+        console.error('Error occured in logout controller');
+        next(err);
+    }
+}
 module.exports = {
     signupController,
-    loginController
+    loginController,
+    logoutContoller
 };

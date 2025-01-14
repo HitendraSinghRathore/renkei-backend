@@ -9,17 +9,25 @@ const {
 async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   let accessToken = authHeader && authHeader.split(" ")[1];
-  if (!accessToken) {
+  const refreshToken = req.cookies.refreshToken; 
+  if (!accessToken && !refreshToken) {
     // if no token provided, return 401
     return res.status(401).json({ msg: "No token provided" });
   }
   try {
     const decoded = jwt.verify(accessToken, config.get("jwtAuthSecret"));
-    req.user = decoded;
+    req.user = decoded; 
+    if (!refreshToken) {
+        return res.status(401).json({ msg: "Refresh token missing" });
+    }
+    const decodedRefreshToken = jwt.verify(refreshToken, config.get("jwtRefreshSecret"));
+    const userData = await User.findById(decodedRefreshToken.id);
+    if(!userData || userData.refreshToken.token !== refreshToken) {
+        return res.status(401).json({ msg: "User not found" });
+    }
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError") {
-      const refreshToken = req.cookies.refreshToken;
       if (!refreshToken) {
         return res.status(401).json({ msg: "Refresh token missing" });
       }
