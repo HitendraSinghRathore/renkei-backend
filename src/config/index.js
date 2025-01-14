@@ -41,6 +41,6 @@ const config = convict({
   }
 })
 
-config.validate({ allowed: 'strict' });
+config.validate({ allowed: 'strict' })
 
 module.exports = config;
