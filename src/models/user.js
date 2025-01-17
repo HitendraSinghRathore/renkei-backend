@@ -30,7 +30,6 @@ const userSchema = new Schema({
       lowercase: true,
       trim: true,
       match: [/\S+@\S+\.\S+/, 'Email is invalid'],
-      index: true, 
     },
     password: {
       type: String,

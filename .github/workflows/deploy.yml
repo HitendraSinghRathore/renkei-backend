@@ -29,13 +29,13 @@ jobs:
         run: |
           docker build -t ghcr.io/hitendrasinghrathore/hitendrasinghrathore/renkei-backend:latest -f Dockerfile .
           docker push ghcr.io/hitendrasinghrathore/hitendrasinghrathore/renkei-backend:latest
-      
-      - name: Wait after image push is done
-        if: success()
-        run: sleep 10
+      # comment render hook for now
+      # - name: Wait after image push is done
+      #   if: success()
+      #   run: sleep 10
 
-      - name: Trigger Render Deployment (using deployment hook)
-        if: success()
-        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
-        env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+      # - name: Trigger Render Deployment (using deployment hook)
+      #   if: success()
+      #   run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
+      #   env:
+      #     RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}

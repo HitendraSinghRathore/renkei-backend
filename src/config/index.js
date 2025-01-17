@@ -62,6 +62,12 @@ const config = convict({
     format: String,
     default: '',
     env: 'GOOGLE_CALLBACK_URL'
+  },
+  redirectDomain: {
+    doc: 'The domain to redirect to',
+    format: String,
+    default: '',
+    env: 'REDIRECT_DOMAIN'
   }
 });
 
