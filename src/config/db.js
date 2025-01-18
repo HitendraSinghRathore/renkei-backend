@@ -3,7 +3,6 @@ const config = require('../config');
 const syncDb = async function () {
     try {
         await mongose.connect(config.get('mongoDbURI'), {
-            autoIndex: true,
             serverSelectionTimeoutMS: 5000 
         });
         console.log('DB connection completed.');

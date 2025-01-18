@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');  
 const authRouter = require('./routes/authRoutes');
 const passport = require('passport');
+const profileRouter = require('./routes/profileRoutes');
 const app = express();
 
 require('./utils/passport');
@@ -23,7 +24,7 @@ app.use(corsMiddleware);
 
 
 app.use('/auth', authRouter);
-
+app.use('/profile', profileRouter);
 app.get('/healthz', function healthRouter (_, res) {
   console.log('Healthz handler');
   const dbState = mongoose.connection.readyState;
