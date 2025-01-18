@@ -24,7 +24,7 @@ app.use(corsMiddleware);
 
 
 app.use('/auth', authRouter);
-app.use('/profile', profileRouter);
+app.use('/users', profileRouter);
 app.get('/healthz', function healthRouter (_, res) {
   console.log('Healthz handler');
   const dbState = mongoose.connection.readyState;
