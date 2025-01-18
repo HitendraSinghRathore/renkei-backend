@@ -67,6 +67,7 @@ const profileUpdateRules = function() {
       .matches(/^\+?[1-9]\d{1,14}$/).withMessage('Please provide a valid phone number')
   ];
 };
+
 module.exports = {
     signupRules,
     loginRules,
