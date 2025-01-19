@@ -12,24 +12,24 @@ async function authMiddleware(req, res, next) {
   const refreshToken = req.cookies.refreshToken; 
   if (!accessToken && !refreshToken) {
     // if no token provided, return 401
-    return res.status(401).json({ msg: "No token provided" });
+    return res.status(401).json({ msg: "No token provided" , redirect: true });
   }
   try {
     const decoded = jwt.verify(accessToken, config.get("jwtAuthSecret"));
     req.user = decoded; 
     if (!refreshToken) {
-        return res.status(401).json({ msg: "Refresh token missing" });
+        return res.status(401).json({ msg: "Refresh token missing",redirect: true  });
     }
     const decodedRefreshToken = jwt.verify(refreshToken, config.get("jwtRefreshSecret"));
     const userData = await User.findById(decodedRefreshToken.id);
     if(!userData || userData.refreshToken.token !== refreshToken) {
-        return res.status(401).json({ msg: "User not found" });
+        return res.status(401).json({ msg: "User not found" , redirect: true });
     }
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       if (!refreshToken) {
-        return res.status(401).json({ msg: "Refresh token missing" });
+        return res.status(401).json({ msg: "Refresh token missing",redirect: true  });
       }
       try {
         const decodedUser = jwt.verify(
@@ -38,10 +38,10 @@ async function authMiddleware(req, res, next) {
         );
         const user = await User.findById(decodedUser.id);
         if (!user || user.refreshToken.token !== refreshToken) {
-          return res.status(401).json({ msg: "Invalid refresh token" });
+          return res.status(401).json({ msg: "Invalid refresh token" ,redirect: true });
         }
         if (new Date() > user.refreshToken.expiresAt) {
-          return res.status(401).json({ msg: "Refresh token expired" });
+          return res.status(401).json({ msg: "Refresh token expired" ,redirect: true });
         }
         const newAccessToken = generateAccessToken(user);
 
@@ -66,7 +66,7 @@ async function authMiddleware(req, res, next) {
         console.log("Error occured when verifying refresh token %o", err);
         return res
           .status(401)
-          .json({ msg: "Invalid or expired refresh token" });
+          .json({ msg: "Invalid or expired refresh token",redirect: true  });
       }
     } else {
       console.log("Error occured when verifying token %o", err);

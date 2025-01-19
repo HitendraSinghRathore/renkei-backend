@@ -6,6 +6,6 @@ module.exports = {
   rules: {
     semi: ['error', 'always'],
     'no-process-exit': 'off',
-    'no-unused-vars': 'warn' 
+    'no-unused-vars': 'warn' ,
   }
 };

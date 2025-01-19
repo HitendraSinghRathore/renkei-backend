@@ -1,4 +1,5 @@
 const { body} = require('express-validator');
+
 const signupRules = function() {
     return [
     body('firstName')
