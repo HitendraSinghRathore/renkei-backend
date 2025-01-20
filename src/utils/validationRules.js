@@ -69,8 +69,37 @@ const profileUpdateRules = function() {
   ];
 };
 
+const projectFetchRules = function() {
+    return [
+    body('name')
+      .optional()
+      .trim()
+      .notEmpty().withMessage('Project name is required')
+      .isLength({ min: 2, max: 50 }).withMessage('Project name must be between 2 and 50 characters'),
+    
+    body('status')
+      .optional()
+      .trim()
+      .notEmpty().withMessage('Project status is required')
+      .isLength({ min: 2, max: 50 }).withMessage('Project status must be between 2 and 50 characters'),
+    
+    body('page')
+      .optional()
+      .trim()
+      .notEmpty().withMessage('Page number is required')
+      .isLength({ min: 2, max: 50 }).withMessage('Page number must be between 2 and 50 characters'),
+    
+    body('limit')
+      .optional()
+      .trim()
+      .notEmpty().withMessage('Limit is required')
+      .isLength({ min: 2, max: 50 }).withMessage('Limit must be between 2 and 50 characters')
+  ];
+  };
+
 module.exports = {
     signupRules,
     loginRules,
-    profileUpdateRules
+    profileUpdateRules,
+    projectFetchRules
 };
