@@ -23,6 +23,7 @@ const ProjectSchema = new Schema(
       type: String,
       required: [true, 'Project name is required'],
       trim: true,
+      unique: true
      
     },
     owner: {

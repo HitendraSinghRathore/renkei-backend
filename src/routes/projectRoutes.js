@@ -9,5 +9,6 @@ projectRouter.use(authMiddleware);
 
 projectRouter.get('/getProjects', validationRules.projectFetchRules(), validationMiddleware, projectController.getProjects);
 
+projectRouter.post('/create', validationRules.projectCreateRules(), validationMiddleware, projectController.createProject);
 
 module.exports = projectRouter;
