@@ -3,6 +3,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const projectController = require('../controllers/projectController');
 const validationRules = require('../utils/validationRules');
 const validationMiddleware = require('../middlewares/validationMiddleware');
+const accessMiddleware = require('../middlewares/projectAccessmiddleware');
 
 const projectRouter = Router();
 projectRouter.use(authMiddleware);
@@ -11,4 +12,5 @@ projectRouter.get('/getProjects', validationRules.projectFetchRules(), validatio
 
 projectRouter.post('/create', validationRules.projectCreateRules(), validationMiddleware, projectController.createProject);
 
+projectRouter.get('/:projectId',accessMiddleware('read'), projectController.getProject  );
 module.exports = projectRouter;

@@ -68,6 +68,12 @@ const config = convict({
     format: String,
     default: '',
     env: 'REDIRECT_DOMAIN'
+  },
+  uiDomain: {
+    doc: 'Domain URL for whitelisting UI in cors',
+    format: String,
+    default: 'https://localhost:3000',
+    env: 'UI_DOMAIN'
   }
 });
 

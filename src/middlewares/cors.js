@@ -1,7 +1,8 @@
 const cors = require('cors');
+const config = require('../config');
 
 const corsOptions = {
-    origin: "https://localhost:3000"
+    origin: config.get('uiDomain')
 };
 
 

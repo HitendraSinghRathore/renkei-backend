@@ -110,7 +110,7 @@ async function createProject(req, res, next) {
     createdProject.id = projectToReturn._id;
     delete createdProject._id;
     delete createdProject.__v;
-    
+
     console.log('Project created successfully');
     res.status(201).json({
       msg: "Project created successfully",
@@ -122,7 +122,30 @@ async function createProject(req, res, next) {
   }
 }
 
+async function getProject(req, res, next) {
+    console.log('Fetching project details');
+    try {
+        const project = req.project;
+        if(!project) {
+            return res.status(400).json({ msg: 'Project not found' });
+        }
+        const projectDetails = project.toObject();
+        projectDetails.id = project._id;
+
+        delete projectDetails.__v;
+        delete projectDetails._id;
+        delete projectDetails.owner;
+        delete projectDetails.collaborators;
+
+        console.log('Project details fetched successfully');
+        return res.status(200).json({  data: projectDetails });
+    } catch(err) {
+        console.error('Error occured in getProject controller');
+        next(err);
+    }
+}
 module.exports = {
   getProjects,
   createProject,
+  getProject
 };
