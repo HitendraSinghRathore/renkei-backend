@@ -8,9 +8,10 @@ const accessMiddleware = require('../middlewares/projectAccessmiddleware');
 const projectRouter = Router();
 projectRouter.use(authMiddleware);
 
-projectRouter.get('/getProjects', validationRules.projectFetchRules(), validationMiddleware, projectController.getProjects);
+projectRouter.get('/', validationRules.projectFetchRules(), validationMiddleware, projectController.getProjects);
 
 projectRouter.post('/create', validationRules.projectCreateRules(), validationMiddleware, projectController.createProject);
 
 projectRouter.get('/:projectId',accessMiddleware('read'), projectController.getProject  );
+
 module.exports = projectRouter;

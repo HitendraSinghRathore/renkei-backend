@@ -7,9 +7,9 @@ const validationMiddleware = require('../middlewares/validationMiddleware');
 
 const profileRouter = Router();
 
-profileRouter.get('/profile',authMiddleware, profileController.getProfileDetails);
+profileRouter.get('/',authMiddleware, profileController.getProfileDetails);
 
-profileRouter.put('/profile', authMiddleware, validationRules.profileUpdateRules(), validationMiddleware, profileController.updateProfileDetails);
+profileRouter.put('/', authMiddleware, validationRules.profileUpdateRules(), validationMiddleware, profileController.updateProfileDetails);
 
 
 module.exports = profileRouter;
