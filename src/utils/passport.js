@@ -7,7 +7,7 @@ passport.use(new GoogleStrategy({
     clientID: config.get('googleClientId'),
     clientSecret: config.get('googleClientSecret'),
     callbackURL: config.get('googleCallbackUrl')
-},async function(_, _, profile, done) {
+},async function(accessToken, refreshToken, profile, done) {
     try {
         const email = profile.emails[0].value;
         const name = profile.displayName;

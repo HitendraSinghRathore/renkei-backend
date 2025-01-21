@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Project = require("../models/project");
+const mongoose = require('mongoose');
+const Project = require('../models/project');
 
 function accessMiddleware(access) {
     return async function(req,res,next) {

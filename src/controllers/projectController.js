@@ -1,25 +1,25 @@
-const Project = require("../models/project");
+const Project = require('../models/project');
 
 async function getProjects(req, res, next) {
-  console.log("Searching projects");
+  console.log('Searching projects');
   const { name, status, page, limit } = req.query;
   const currentPage = parseInt(page, 10) || 1;
   const pageLimit = parseInt(limit, 10) || 10;
   try {
-    let query = {};
+    const query = {};
     if (name) {
-      query.name = { $regex: name, $options: "i" };
+      query.name = { $regex: name, $options: 'i' };
     }
     if (status) {
-      if (status === "owned") {
+      if (status === 'owned') {
         query.owner = req.user.id;
-      } else if (status === "shared") {
-        query["collaborators.user"] = req.user.id;
+      } else if (status === 'shared') {
+        query['collaborators.user'] = req.user.id;
       }
     } else {
       query.$or = [
         { owner: req.user.id },
-        { "collaborators.user": req.user.id },
+        { 'collaborators.user': req.user.id },
       ];
     }
     console.log(`Query created for lookup ${query}`);
@@ -27,8 +27,8 @@ async function getProjects(req, res, next) {
       Project.countDocuments(query),
       Project.find(query)
         .sort({ updatedAt: -1 })
-        .populate("owner", "name")
-        .select("_id name createdAt updatedAt owner collaborators")
+        .populate('owner', 'name')
+        .select('_id name createdAt updatedAt owner collaborators')
         .skip((currentPage - 1) * pageLimit)
         .limit(pageLimit)
         .lean(),
@@ -36,9 +36,9 @@ async function getProjects(req, res, next) {
     const totalPages = Math.ceil(totalCount / pageLimit);
 
     const formattedProjects = projectsList.map((project) => {
-      let access = "read";
+      let access = 'read';
       if (project.owner._id.toString() === req.user.id.toString()) {
-        access = "write";
+        access = 'write';
       } else {
         const collab = project.collaborators.find(
           (collab) => collab.user._id.toString() === req.user.id.toString()
@@ -82,19 +82,19 @@ async function getProjects(req, res, next) {
       });
     }
   } catch (err) {
-    console.error("Error occured in getProjects controller");
+    console.error('Error occured in getProjects controller');
     next(err);
   }
 }
 
 async function createProject(req, res, next) {
-  console.log("Creating new project");
+  console.log('Creating new project');
   try {
     const { name, content } = req.body;
     const existingProject = await Project.findOne({ name });
     if (existingProject) {
       return res.status(400).json({
-        msg: "Project already exists",
+        msg: 'Project already exists',
       });
     }
 
@@ -107,17 +107,17 @@ async function createProject(req, res, next) {
     await newProject.save();
 
     const createdProject = newProject.toObject();
-    createdProject.id = projectToReturn._id;
+    createdProject.id = createdProject._id;
     delete createdProject._id;
     delete createdProject.__v;
 
     console.log('Project created successfully');
     res.status(201).json({
-      msg: "Project created successfully",
+      msg: 'Project created successfully',
       data: createdProject,
     });
   } catch (err) {
-    console.error("Error occured in createProject controller");
+    console.error('Error occured in createProject controller');
     next(err);
   }
 }

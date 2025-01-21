@@ -51,7 +51,7 @@ const userSchema = new Schema({
     timestamps: true, 
   });
   userSchema.index({ email: 1 }, { unique: true });
-  userSchema.index({"refreshToken.token": 1}, { unique: true });
+  userSchema.index({'refreshToken.token': 1}, { unique: true });
 
   userSchema.pre('save', async function save (next) {
     if (!this.isModified('password')) {

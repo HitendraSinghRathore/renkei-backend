@@ -13,7 +13,7 @@ const syncDb = async function () {
     mongose.connection.on('connected', function () {
         console.log('DB connected.');
     });
-    mongose.connection.on('error', function () {
+    mongose.connection.on('error', function (err) {
         console.error('DB connection error:', err);
         process.exit(1);
     });

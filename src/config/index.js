@@ -45,12 +45,6 @@ const config = convict({
     default: 'secret',  
     env: 'GOOGLE_CLIENT_SECRET'
   },
-  googleClientSecret: {
-    doc: 'The secret used to sign the JWT tokens.',
-    format: String,
-    default: 'secret',  
-    env: 'GOOGLE_CLIENT_SECRET'
-  },
   googleClientId: {
     doc: 'The secret used to sign the JWT tokens.',
     format: String,

@@ -1,6 +1,6 @@
-const passport = require("passport");
-const User = require("../models/user");
-const { generateRefreshToken, generateAccessToken } = require("../utils/tokenUtils");
+const passport = require('passport');
+const User = require('../models/user');
+const { generateRefreshToken, generateAccessToken } = require('../utils/tokenUtils');
 const config = require('../config');
 async function signupController(req, res, next) {
    const { firstName, lastName, email, password, phone } = req.body;
@@ -44,10 +44,10 @@ async function loginController(req, res,next) {
             expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000),
         };
         await user.save();
-        res.cookie("refreshToken", refreshToken, {
+        res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "Strict",
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
             maxAge: 6 * 60 * 60 * 1000,
         });
         console.log('User logged in successfully');
