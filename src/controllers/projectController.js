@@ -1,4 +1,5 @@
 const Project = require('../models/project');
+const User = require('../models/user');
 
 async function getProjects(req, res, next) {
   console.log('Searching projects');
@@ -144,8 +145,41 @@ async function getProject(req, res, next) {
         next(err);
     }
 }
+
+async function getAllMembers(req, res, next) {
+  console.log('Fetching project members');
+  try {
+    const ownerId = req.project.owner.toString();
+    const collaborators = req.project.collaborators;
+    const allUsers = await User.find({}, '_id name email').lean();
+    const projectMembers =  allUsers.filter(u => u._id.toString() !== ownerId).map(function(item) {
+      
+        const collab = collaborators.find((collab) => collab.user.toString() === item._id.toString());
+        if(collab) {
+          return {
+            id: item._id,
+            name: item.name,
+            email: item.email,
+            access: collab.access
+          };
+        }
+        return {
+          id: item._id,
+          name: item.name,
+          email: item.email,
+          access: null
+        };
+    });
+    console.log('Project members fetched successfully');
+    return res.status(200).json({  data: projectMembers });
+  } catch(err) {
+    console.error('Error occured in getProjectMembers controller');
+    next(err);
+  }
+}
 module.exports = {
   getProjects,
   createProject,
-  getProject
+  getProject,
+  getAllMembers
 };

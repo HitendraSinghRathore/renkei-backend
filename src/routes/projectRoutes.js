@@ -12,6 +12,8 @@ projectRouter.get('/', validationRules.projectFetchRules(), validationMiddleware
 
 projectRouter.post('/create', validationRules.projectCreateRules(), validationMiddleware, projectController.createProject);
 
-projectRouter.get('/:projectId',accessMiddleware('read'), projectController.getProject  );
+projectRouter.get('/:projectId',accessMiddleware('read'), projectController.getProject );
+
+projectRouter.get('/:projectId/members', accessMiddleware('owner'), projectController.getAllMembers);
 
 module.exports = projectRouter;
