@@ -1,6 +1,7 @@
 const mongose = require('mongoose');
 const config = require('../config');
 const syncDb = async function () {
+    
     try {
         await mongose.connect(config.get('mongoDbURI'), {
             serverSelectionTimeoutMS: 5000 
