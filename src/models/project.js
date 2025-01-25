@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ACESSS_CONSTANTS } = require('../utils/constants');
 const { Schema } = mongoose;
 
 const CollaboratorSchema = new Schema(
@@ -10,8 +11,8 @@ const CollaboratorSchema = new Schema(
     },
     access: {
       type: String,
-      enum: ['read', 'write'],
-      default: 'read',
+      enum: [ACESSS_CONSTANTS.READ, ACESSS_CONSTANTS.WRITE],
+      default: ACESSS_CONSTANTS.READ,
     },
   },
   { _id: false }

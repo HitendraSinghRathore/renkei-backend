@@ -1,5 +1,7 @@
+const { default: mongoose } = require('mongoose');
 const Project = require('../models/project');
 const User = require('../models/user');
+const { ACESSS_CONSTANTS } = require('../utils/constants');
 
 async function getProjects(req, res, next) {
   console.log('Searching projects');
@@ -37,9 +39,9 @@ async function getProjects(req, res, next) {
     const totalPages = Math.ceil(totalCount / pageLimit);
 
     const formattedProjects = projectsList.map((project) => {
-      let access = 'read';
+      let access = ACESSS_CONSTANTS.READ;
       if (project.owner._id.toString() === req.user.id.toString()) {
-        access = 'write';
+        access = ACESSS_CONSTANTS.WRITE;
       } else {
         const collab = project.collaborators.find(
           (collab) => collab.user._id.toString() === req.user.id.toString()
@@ -53,7 +55,9 @@ async function getProjects(req, res, next) {
         name: project.name,
         createdAt: project.createdAt,
         updatedAt: project.updatedAt,
-        owner: project.owner.name,
+        owner: { 
+          id: project.owner._id.toString(), 
+          name: project.owner.name },
         access,
       };
     });
@@ -130,14 +134,13 @@ async function getProject(req, res, next) {
         if(!project) {
             return res.status(400).json({ msg: 'Project not found' });
         }
-        const projectDetails = project.toObject();
-        projectDetails.id = project._id;
-
-        delete projectDetails.__v;
-        delete projectDetails._id;
-        delete projectDetails.owner;
-        delete projectDetails.collaborators;
-
+        const projectDetails = {
+            id: project._id,
+            name: project.name,
+            createdAt: project.createdAt,
+            updatedAt: project.updatedAt,
+            content: project.content
+        };
         console.log('Project details fetched successfully');
         return res.status(200).json({  data: projectDetails });
     } catch(err) {
@@ -157,14 +160,14 @@ async function getAllMembers(req, res, next) {
         const collab = collaborators.find((collab) => collab.user.toString() === item._id.toString());
         if(collab) {
           return {
-            id: item._id,
+            id: item._id.toString(),
             name: item.name,
             email: item.email,
             access: collab.access
           };
         }
         return {
-          id: item._id,
+          id: item._id.toString(),
           name: item.name,
           email: item.email,
           access: null
@@ -177,9 +180,91 @@ async function getAllMembers(req, res, next) {
     next(err);
   }
 }
+
+async function updateProject(req, res, next) {
+  console.log('Updating project');
+  try {
+    const project = req.project;
+    const { name, content } = req.body;
+    if(name) {
+      const exitingProject = await Project.findOne({name });
+      if(exitingProject && exitingProject._id.toString() !== project._id.toString()) {
+        return res.status(400).json({ msg: 'Please provide a different project name' });
+      }
+      project.name = name;
+  }
+  if(content) {
+    project.content = content;
+  }
+  await project.save();
+  const projectData = {
+    id: project._id,
+    name: project.name,
+    createdAt: project.createdAt,
+    updatedAt: project.updatedAt,
+    content: project.content
+  };
+  console.log('Project updated successfully');
+  return res.status(200).json({ msg: 'Project updated successfully',  data: projectData });
+  } catch(err) {
+    console.error('Error occured in updateProject controller');
+    next(err);
+  }
+}
+
+async function shareProject(req, res, next) {
+  console.log('Sharing project route called');
+  try {
+    const project = req.project;
+    const { users } = req.body;
+    const ids = users.map(u => u.id);
+    // check if all users are unique
+    if (ids.length !== new Set(ids).size) {
+      return res.status(400).json({ msg: 'Duplicate user ids provided' });
+    }
+    const foundUsers = await User.find({ _id: { $in: ids } });
+    if (foundUsers.length !== ids.length) {
+      return res.status(400).json({ msg: 'Invalid user ids provided' });
+    }
+    // check if user is owner
+    if(ids.includes(project.owner.toString())) {
+      return res.status(400).json({ msg: 'Owner cannot be a collaborator' });
+    }
+    
+    project.collaborators = users.map(user => {
+      return {
+        user: mongoose.Types.ObjectId(user.id),
+        access: user.access
+      };
+    });
+   
+    await project.save();
+    console.log('Project shared successfully');
+    return res.status(200).json({ msg: 'Project shared successfully' });
+  } catch(err) {
+    console.error('Error occured in shareProject controller');
+    next(err);
+  }
+}
+
+async function deleteProject(req, res, next) {
+  console.log('Deleting project route called');
+  try {
+    const project = req.project;
+    await project.remove();
+    console.log('Project deleted successfully');
+    return res.status(200).json({ msg: 'Project deleted successfully' });
+  } catch(err) {
+    console.error('Error occured in deleteProject controller');
+    next(err);
+  }
+}
 module.exports = {
   getProjects,
   createProject,
   getProject,
-  getAllMembers
+  getAllMembers,
+  updateProject,
+  shareProject,
+  deleteProject
 };

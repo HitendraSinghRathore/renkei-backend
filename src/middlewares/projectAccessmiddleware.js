@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Project = require('../models/project');
+const { ACESSS_CONSTANTS } = require('../utils/constants');
 
 function accessMiddleware(access) {
     return async function(req,res,next) {
@@ -10,7 +11,7 @@ function accessMiddleware(access) {
             }
             const project = await Project.findById(projectId);
             if(!project) {
-                return res.status(400).json({msg: 'Project not found for the give id'});
+                return res.status(404).json({msg: 'Project not found for the give id'});
             }
             const userId = req.user.id.toString();
             const ownerId = project.owner.toString();
@@ -22,20 +23,20 @@ function accessMiddleware(access) {
                 const collaborator = project.collaborators.find((collab) => collab.user.toString() === userId );
                 if(collaborator) {
                     // check if collborator access is write and required access is either read or write
-                    if(collaborator.access === 'write' && ['write', 'read'].includes(access) ) {
+                    if(collaborator.access === ACESSS_CONSTANTS.WRITE && [ACESSS_CONSTANTS.WRITE, ACESSS_CONSTANTS.READ].includes(access) ) {
                         hasAccess = true;
-                    } else if(collaborator.access === 'read' && access === 'read' ) {
+                    } else if(collaborator.access === ACESSS_CONSTANTS.READ && access === ACESSS_CONSTANTS.READ ) {
                         hasAccess = true;
                     }
                 }
             }
             if(!hasAccess) {
-                return res.status(403).status({msg: 'User does not have required permission to perform this operation'});
+                return res.status(403).json({msg: 'User does not have required permission to perform this operation'});
             }
             req.project = project;
             next();
         } catch(err) {
-            console.error('Error while authticating user access level');
+            console.error('Error while authenticating user access level');
             next(err);
         }
     };

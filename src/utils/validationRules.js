@@ -1,4 +1,6 @@
 const { body, query } = require('express-validator');
+const { default: mongoose } = require('mongoose');
+const { ACESSS_CONSTANTS } = require('./constants');
 
 const signupRules = function () {
   return [
@@ -155,10 +157,52 @@ const projectCreateRules = function () {
   ];
 };
 
+const projectUpdateRules = function () {
+  return [
+    body('name')
+      .optional()
+      .trim()
+      .isLength({ min: 2, max: 50 })
+      .withMessage('Project name must be between 2 and 50 characters'),
+      
+      body('content')
+      .optional()
+      .isJSON()
+      .withMessage('Project content must be a valid JSON')
+      .custom((value) => {
+        const keys = ['elements', 'appState', 'scrollToContent'];
+        return keys.every(key => key in value);
+      })
+      .withMessage('Project content must include all the required fields')
+  ];
+};
+
+const projectShareRules = function () {
+  return [
+    body('users').
+    isArray().
+    withMessage('Users must be an array').
+    custom((value) => {
+      return value.every(user => {
+        if(!user.id || !mongoose.Types.ObjectId.isValid(user.id)) {
+          return false;
+        }
+        if(!user.access || ![ACESSS_CONSTANTS.READ, ACESSS_CONSTANTS.WRITE].includes(user.access)) {
+          return false;
+        }
+        return true;
+      });
+    })
+    .withMessage('Users must be an array of valid objects with id and access fields'),
+  ];
+};
+
 module.exports = {
   signupRules,
   loginRules,
   profileUpdateRules,
   projectFetchRules,
   projectCreateRules,
+  projectUpdateRules,
+  projectShareRules
 };
