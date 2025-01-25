@@ -5,7 +5,6 @@ const validationRules = require('../utils/validationRules');
 const validationMiddleware = require('../middlewares/validationMiddleware');
 const accessMiddleware = require('../middlewares/projectAccessmiddleware');
 const { ACESSS_CONSTANTS } = require('../utils/constants');
-const project = require('../models/project');
 
 const projectRouter = Router();
 projectRouter.use(authMiddleware);
