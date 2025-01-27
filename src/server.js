@@ -1,13 +1,18 @@
 'use strict';
 const config = require('./config');
+const http = require('http');
 const PORT = config.get('port');
 const dbConfig = require('./config/db');
 const gracefulShutdown = require('./utils/shutdown');
+const { initSocket } = require('./socket');
 dbConfig.syncDb();
 
 const app = require('./app');
 
-app.listen(PORT, function serverSetup () {
+const server = http.createServer(app);
+initSocket(server);
+
+server.listen(PORT, function serverSetup () {
   console.log(`....Server started on PORT: ${PORT}......`);
 });
 
