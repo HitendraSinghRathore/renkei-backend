@@ -114,7 +114,7 @@ function googleCallback(req, res, next) {
                 maxAge: 6 * 60 * 60 * 1000, 
               });
             console.log('User logged in successfully');
-            return res.redirect(`${config.get('redirectDomain')}/auth/callback#accessToken=${accessToken}`);
+            return res.redirect(`${config.get('uiDomain')}/auth/callback#accessToken=${accessToken}`);
 
         } catch (err) {
             console.error('Error occured in generating access token %o', err);

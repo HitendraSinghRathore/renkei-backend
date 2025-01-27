@@ -80,12 +80,13 @@ function initSocket(httpServer) {
           socket
             .to(roomName)
             .emit(SOCKET_EVENTS.ACTIVE_USERS, updatedActiveUsers);
-          callback(null, {
+          callback({
             msg: `User successfully joined project ${projectId}`,
+            status: 'success',
           });
         } catch (err) {
-          console.error('Error occured in joinHandler socket event', err);
-          callback(err);
+          console.error('Error occurred in joinHandler socket event', err);
+          callback({error: err.message, status: 'error'});
         }
       }
     );
@@ -97,14 +98,18 @@ function initSocket(httpServer) {
         const roomName = `project:${projectId}`;
         const socketIds = await io.in(roomName).allSockets();
         const updatedActiveUsers = [];
+        const uniqueUsers = new Set();
         for (const sid of socketIds) {
           const s = io.sockets.sockets.get(sid);
           if (s && s.user) {
-            updatedActiveUsers.push({
-              id: s.user.id,
-              name: s.user.name,
-              email: s.user.email,
-            });
+            if (!uniqueUsers.has(s.user.id)) {
+                uniqueUsers.add(s.user.id);
+                updatedActiveUsers.push({
+                    id: s.user.id,
+                    name: s.user.name,
+                    email: s.user.email,
+                  });
+            }
           }
         }
         socket

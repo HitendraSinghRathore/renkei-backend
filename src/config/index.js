@@ -57,12 +57,6 @@ const config = convict({
     default: '',
     env: 'GOOGLE_CALLBACK_URL'
   },
-  redirectDomain: {
-    doc: 'The domain to redirect to',
-    format: String,
-    default: '',
-    env: 'REDIRECT_DOMAIN'
-  },
   uiDomain: {
     doc: 'Domain URL for whitelisting UI in cors',
     format: String,
