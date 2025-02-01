@@ -56,7 +56,7 @@ async function authMiddleware(req, res, next) {
         res.cookie('refreshToken', newRefreshToken, {
           httpOnly: true,
           secure: false, // for now
-          sameSite: 'None',
+          sameSite: 'lax',
           maxAge: 6 * 60 * 60 * 1000,
         });
         res.setHeader('Authorization', `Bearer ${newAccessToken}`);
