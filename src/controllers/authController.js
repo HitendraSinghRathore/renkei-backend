@@ -47,7 +47,7 @@ async function loginController(req, res,next) {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
+            sameSite: 'None',
             maxAge: 6 * 60 * 60 * 1000,
         });
         console.log('User logged in successfully');
@@ -74,7 +74,7 @@ async function logoutContoller(req, res,next) {
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict',
+            sameSite: 'None',
         });
         console.log('User logged out successfully');
         return res.status(200).json({ msg: 'User logged out successfully' });
@@ -110,7 +110,7 @@ function googleCallback(req, res, next) {
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: config.get('env') === 'production', 
-                sameSite: 'Strict',
+                sameSite: 'None',
                 maxAge: 6 * 60 * 60 * 1000, 
               });
             console.log('User logged in successfully');
