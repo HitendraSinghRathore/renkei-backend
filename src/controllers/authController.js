@@ -46,7 +46,7 @@ async function loginController(req, res,next) {
         await user.save();
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: false, // for now
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'none',
             maxAge: 6 * 60 * 60 * 1000,
             path: '/'
@@ -111,7 +111,7 @@ function googleCallback(req, res, next) {
             console.log('User refresh token generated');
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
-                secure: false, // for now
+                secure:  process.env.NODE_ENV === 'production', 
                 sameSite: 'none',
                 maxAge: 6 * 60 * 60 * 1000, 
                 path: '/'
