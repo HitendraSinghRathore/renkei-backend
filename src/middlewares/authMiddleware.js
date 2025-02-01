@@ -60,7 +60,7 @@ async function authMiddleware(req, res, next) {
         res.cookie('refreshToken', newRefreshToken, {
           httpOnly: true,
           secure: false, // for now
-          sameSite: 'none',
+          sameSite: 'lax',
           maxAge: 6 * 60 * 60 * 1000,
           path: '/'
         });
