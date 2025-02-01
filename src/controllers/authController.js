@@ -47,8 +47,9 @@ async function loginController(req, res,next) {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: false, // for now
-            sameSite: 'lax',
+            sameSite: 'none',
             maxAge: 6 * 60 * 60 * 1000,
+            path: '/'
         });
         console.log('User logged in successfully');
         return res.status(200).json({ msg: 'User logged in successfully', accessToken });
@@ -74,7 +75,9 @@ async function logoutContoller(req, res,next) {
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: false, // for now
-            sameSite: 'lax',
+            sameSite: 'none',
+            maxAge: 6 * 60 * 60 * 1000,
+            path: '/'
         });
         console.log('User logged out successfully');
         return res.status(200).json({ msg: 'User logged out successfully' });
@@ -110,8 +113,9 @@ function googleCallback(req, res, next) {
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: false, // for now
-                sameSite: 'lax',
+                sameSite: 'none',
                 maxAge: 6 * 60 * 60 * 1000, 
+                path: '/'
               });
             console.log('User logged in successfully');
             return res.redirect(`${config.get('uiDomain')}/auth/callback#accessToken=${accessToken}`);

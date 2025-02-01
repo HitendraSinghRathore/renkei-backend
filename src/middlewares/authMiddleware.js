@@ -60,8 +60,9 @@ async function authMiddleware(req, res, next) {
         res.cookie('refreshToken', newRefreshToken, {
           httpOnly: true,
           secure: false, // for now
-          sameSite: 'lax',
+          sameSite: 'none',
           maxAge: 6 * 60 * 60 * 1000,
+          path: '/'
         });
         res.setHeader('Authorization', `Bearer ${newAccessToken}`);
         req.user = jwt.verify(newAccessToken, config.get('jwt_access_secret'));
