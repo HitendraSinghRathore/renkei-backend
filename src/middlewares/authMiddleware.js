@@ -55,7 +55,7 @@ async function authMiddleware(req, res, next) {
 
         res.cookie('refreshToken', newRefreshToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
+          secure: false, // for now
           sameSite: 'None',
           maxAge: 6 * 60 * 60 * 1000,
         });
