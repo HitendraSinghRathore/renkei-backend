@@ -65,18 +65,18 @@ async function logoutContoller(req, res,next) {
         return res.status(401).json({ msg: 'User not logged in' });
     }
     try {
-        const user  = await User.findByIdAndDelete(user._id);
-        if(!user) {
+        const userModel  = await User.findByIdAndDelete(user._id);
+        if(!userModel) {
             return res.status(404).json({ msg: 'User not found' });
         }
-        user.refreshToken = undefined;
-        await user.save();
+        userModel.refreshToken = undefined;
+        await userModel.save();
 
         res.clearCookie('refreshToken', {
             httpOnly: true,
-            secure: false, // for now
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'none',
-             path: '/'
+            path: '/'
         });
         console.log('User logged out successfully');
         return res.status(200).json({ msg: 'User logged out successfully' });
