@@ -65,7 +65,7 @@ async function logoutContoller(req, res,next) {
         return res.status(401).json({ msg: 'User not logged in' });
     }
     try {
-        const userModel  = await User.findByIdAndDelete(user.id);
+        const userModel  = await User.findById( user.id );
         if(!userModel) {
             return res.status(404).json({ msg: 'User not found' });
         }
