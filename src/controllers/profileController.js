@@ -32,7 +32,7 @@ async function updateProfileDetails(req, res,next) {
         if(!user) {
             return res.status(401).json({ msg: 'User not logged in' });
         }
-        const { firstName, lastName, email, phone } = req.body;
+        const { firstName, lastName, phone } = req.body;
         const userDetails = await User.findById(user.id);
         if(!userDetails) {
             return res.status(400).json({ msg: 'User not found' });
@@ -42,7 +42,6 @@ async function updateProfileDetails(req, res,next) {
             name = `${firstName} ${lastName}`;
         }
         userDetails.name = name;
-        userDetails.email = email;
         userDetails.phone = phone;
         await userDetails.save();
         return res.status(200).json({ msg: 'Profile updated successfully' });

@@ -72,13 +72,6 @@ const profileUpdateRules = function () {
       .isLength({ min: 2, max: 50 })
       .withMessage('Last name must be between 2 and 50 characters'),
 
-    body('email')
-      .trim()
-      .notEmpty()
-      .withMessage('Email is required')
-      .isEmail()
-      .withMessage('Invalid email format')
-      .normalizeEmail(),
 
     body('phone')
       .optional()
