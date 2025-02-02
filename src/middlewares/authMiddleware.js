@@ -66,7 +66,7 @@ async function authMiddleware(req, res, next) {
           path: '/'
         });
         res.setHeader('Authorization', `Bearer ${newAccessToken}`);
-        req.user = jwt.verify(newAccessToken, config.get('jwt_access_secret'));
+        req.user = jwt.verify(newAccessToken, config.get('jwtAuthSecret'));
         next();
       } catch (err) {
         console.log('Error occured when verifying refresh token %o', err);
