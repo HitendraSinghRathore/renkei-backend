@@ -9,6 +9,7 @@ passport.use(new GoogleStrategy({
     callbackURL: config.get('googleCallbackUrl')
 },async function(accessToken, refreshToken, profile, done) {
     try {
+        console.log('Creating user with google strategy');
         const email = profile.emails[0].value;
         const name = profile.displayName;
         let user = await User.findOne({ email });
