@@ -13,7 +13,7 @@ passport.use(new GoogleStrategy({
         const email = profile.emails[0].value;
         const name = profile.displayName;
         let user = await User.findOne({ email });
-        let newUser;
+        let newUser = user;
         if(user) {
             if(!user.isGoogleLogin) { 
                 return done(null, false, { message: 'Email already in use with different login method.' }); 
