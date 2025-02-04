@@ -33,22 +33,24 @@ async function authMiddleware(req, res, next) {
     next();
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
+      console.log('Token expired');
       if (!refreshToken) {
         return res.status(401).json({ msg: 'Refresh token missing', redirect: true });
       }
 
       try {
         const decodedUser = jwt.verify(refreshToken, config.get('jwtRefreshSecret'));
-        
+        console.log('Token Verified for user details:', decodedUser);
         const updatedUser = await User.findOneAndUpdate(
           { _id: decodedUser.id, 'refreshToken.token': refreshToken },
           { $set: { 'refreshToken.token': generateRefreshToken(decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
           { new: true } 
         );
-
+        console.log('Token updated for user: %o',updatedUser );
         if (!updatedUser) {
           return res.status(401).json({ msg: 'Invalid refresh token', redirect: true });
         }
+        console.log('Createt new token:' );
 
         const newAccessToken = generateAccessToken(updatedUser);
 
