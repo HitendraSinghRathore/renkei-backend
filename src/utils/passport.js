@@ -25,7 +25,7 @@ passport.use(new GoogleStrategy({
 
             });
             newUser = await user.save();
-            console.log('User created');
+            console.log('User created %o',newUser); 
         }
         return done(null, newUser);
 
