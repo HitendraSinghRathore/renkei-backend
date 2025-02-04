@@ -12,6 +12,7 @@ passport.use(new GoogleStrategy({
         const email = profile.emails[0].value;
         const name = profile.displayName;
         let user = await User.findOne({ email });
+        let newUser;
         if(user) {
             if(!user.isGoogleLogin) { 
                 return done(null, false, { message: 'Email already in use with different login method.' }); 
@@ -23,10 +24,10 @@ passport.use(new GoogleStrategy({
                 isGoogleLogin: true
 
             });
-            await user.save();
+            newUser = await user.save();
             console.log('User created');
         }
-        return done(null, user);
+        return done(null, newUser);
 
     } catch (err) {
         console.error('Error with google strategy %o', err);
