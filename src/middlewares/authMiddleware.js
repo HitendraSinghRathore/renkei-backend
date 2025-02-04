@@ -46,13 +46,13 @@ async function authMiddleware(req, res, next) {
           { $set: { 'refreshToken.token': generateRefreshToken(decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
           { new: true } 
         );
-        console.log('Token updated for user: %o',updatedUser );
+        console.log('Token updated for user: %o',decodedUser );
         if (!updatedUser) {
           return res.status(401).json({ msg: 'Invalid refresh token', redirect: true });
         }
-        console.log('Createt new token:' );
+        console.log('Createt new token %o:', decodedUser);
 
-        const newAccessToken = generateAccessToken(updatedUser);
+        const newAccessToken = generateAccessToken(decodedUser);
 
         res.cookie('refreshToken', updatedUser.refreshToken.token, {
           httpOnly: true,
