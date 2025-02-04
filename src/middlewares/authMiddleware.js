@@ -34,51 +34,46 @@ async function authMiddleware(req, res, next) {
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
       if (!refreshToken) {
-        return res.status(401).json({ msg: 'Refresh token missing',redirect: true  });
+        return res.status(401).json({ msg: 'Refresh token missing', redirect: true });
       }
+
       try {
-        const decodedUser = jwt.verify(
-          refreshToken,
-          config.get('jwtRefreshSecret')
+        const decodedUser = jwt.verify(refreshToken, config.get('jwtRefreshSecret'));
+        
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: decodedUser.id, 'refreshToken.token': refreshToken },
+          { $set: { 'refreshToken.token': generateRefreshToken(decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
+          { new: true } 
         );
-        const user = await User.findById(decodedUser.id);
-        if (!user || user.refreshToken.token !== refreshToken) {
-          return res.status(401).json({ msg: 'Invalid refresh token' ,redirect: true });
+
+        if (!updatedUser) {
+          return res.status(401).json({ msg: 'Invalid refresh token', redirect: true });
         }
-        if (new Date() > user.refreshToken.expiresAt) {
-          return res.status(401).json({ msg: 'Refresh token expired' ,redirect: true });
-        }
-        const newAccessToken = generateAccessToken(user);
 
-        const newRefreshToken = generateRefreshToken(user);
+        const newAccessToken = generateAccessToken(updatedUser);
 
-        user.refreshToken = {
-          token: newRefreshToken,
-          expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000),
-        };
-        await user.save();
-
-        res.cookie('refreshToken', newRefreshToken, {
+        res.cookie('refreshToken', updatedUser.refreshToken.token, {
           httpOnly: true,
-          secure:  process.env.NODE_ENV === 'production', 
+          secure: process.env.NODE_ENV === 'production',
           sameSite: 'none',
           maxAge: 6 * 60 * 60 * 1000,
           path: '/'
         });
         res.setHeader('Authorization', `Bearer ${newAccessToken}`);
-        req.user = jwt.verify(newAccessToken, config.get('jwtAuthSecret'));
+
+        req.user = jwt.verify(newAccessToken, config.get('jwtAuthSecret')); 
         next();
-      } catch (err) {
-        console.log('Error occured when verifying refresh token %o', err);
-        return res
-          .status(401)
-          .json({ msg: 'Invalid or expired refresh token',redirect: true  });
+
+      } catch (refreshErr) {
+        console.error('Error verifying or updating refresh token:', refreshErr); 
+        return res.status(401).json({ msg: 'Invalid or expired refresh token', redirect: true });
       }
     } else {
-      console.log('Error occured when verifying token %o', err);
+      console.error('Error verifying access token:', err); 
       return res.status(403).json({ msg: 'Forbidden access' });
     }
   }
-}
+  }
+
 
 module.exports = authMiddleware;
