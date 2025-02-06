@@ -27,6 +27,9 @@ async function authMiddleware(req, res, next) {
     }
     const decodedRefreshToken = jwt.verify(refreshToken, config.get('jwtRefreshSecret'));
     const userData = await User.findById(decodedRefreshToken.id);
+    console.log('Auth is success checking middleware with user %o with refresh token %o', userData, refreshToken);
+    console.log('Decoded refresh token %o', decodedRefreshToken);
+    
     if(!userData || userData.refreshToken.token !== refreshToken) {
         return res.status(401).json({ msg: 'User not found' , redirect: true });
     }
@@ -43,7 +46,7 @@ async function authMiddleware(req, res, next) {
         console.log('Token Verified for user details:', decodedUser);
         const updatedUser = await User.findOneAndUpdate(
           { _id: decodedUser.id, 'refreshToken.token': refreshToken },
-          { $set: { 'refreshToken.token': generateRefreshToken(decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
+          { $set: { 'refreshToken.token': generateRefreshToken(...decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
           { new: true } 
         );
         console.log('Token updated for user: %o',decodedUser );
