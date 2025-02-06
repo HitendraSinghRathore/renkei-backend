@@ -43,7 +43,7 @@ async function authMiddleware(req, res, next) {
         const decodedUser = jwt.verify(refreshToken, config.get('jwtRefreshSecret'));
         const updatedUser = await User.findOneAndUpdate(
           { _id: decodedUser.id, 'refreshToken.token': refreshToken },
-          { $set: { 'refreshToken.token': generateRefreshToken(...decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
+          { $set: { 'refreshToken.token': generateRefreshToken(decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
           { new: true } 
         );
         if (!updatedUser) {
