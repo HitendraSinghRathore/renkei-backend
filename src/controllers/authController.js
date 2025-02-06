@@ -37,8 +37,13 @@ async function loginController(req, res,next) {
         if (!isVerified) {
             return res.status(401).json({ msg: 'Invalid email or password' });
         }
-        const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
+        const userPaylod = {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name
+        };
+        const accessToken = generateAccessToken(userPaylod);
+        const refreshToken = generateRefreshToken(userPaylod);
         user.refreshToken = {
             token: refreshToken,
             expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000),
