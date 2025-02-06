@@ -96,7 +96,6 @@ function googleCallback(req, res, next) {
             console.log('Error occured in google callback %o', err);
             return next(err);
         }
-        console.log('User recived in callback %o', user);
         if(!user) {
             console.log('User not found in callback');
             return res.status(401).json({ msg: 'User authenticaion failed' });
@@ -107,7 +106,6 @@ function googleCallback(req, res, next) {
                 email: user.email,
                 name: user.name
             };
-            console.log('User being signed %o', userPaylod);
             const accessToken = generateAccessToken(userPaylod);
             const refreshToken = generateRefreshToken(userPaylod);
             user.refreshToken = {
@@ -115,7 +113,6 @@ function googleCallback(req, res, next) {
                 expiresAt: new Date(Date.now() + 6 * 60 * 60 * 1000)
             };
             await user.save();
-            console.log('User refresh token generated');
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure:  process.env.NODE_ENV === 'production', 

@@ -14,7 +14,6 @@ passport.use(new GoogleStrategy({
         const name = profile.displayName;
         let user = await User.findOne({ email });
         let newUser = user;
-        console.log('Google user %o', user);
         if(user) {
             if(!user.isGoogleLogin) { 
                 return done(null, false, { message: 'Email already in use with different login method.' }); 
@@ -27,7 +26,6 @@ passport.use(new GoogleStrategy({
 
             });
             newUser = await user.save();
-            console.log('User created %o',newUser); 
         }
         return done(null, newUser);
 
