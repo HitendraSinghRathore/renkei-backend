@@ -3,7 +3,7 @@ const config = require('../config');
 
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { id: user._id, email: user.email },
+    { id: user.id, email: user.email, name: user.name },
     config.get('jwtAuthSecret'),
     { expiresIn: '30m' }
   );
@@ -11,7 +11,7 @@ const generateAccessToken = (user) => {
 
 const generateRefreshToken = (user) => {
   return jwt.sign(
-    { id: user._id, email: user.email },
+    { id: user.id, email: user.email, name: user.name },
     config.get('jwtRefreshSecret'),
     { expiresIn: '6h' }
   );
