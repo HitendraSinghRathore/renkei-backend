@@ -103,17 +103,14 @@ const projectFetchRules = function () {
       .optional()
       .trim()
       .notEmpty()
-      .withMessage('Page number is required')
-      .isLength({ min: 2, max: 50 })
-      .withMessage('Page number must be between 2 and 50 characters'),
+      .withMessage('Page number is required'),
 
     query('limit')
       .optional()
       .trim()
       .notEmpty()
       .withMessage('Limit is required')
-      .isLength({ min: 2, max: 50 })
-      .withMessage('Limit must be between 2 and 50 characters'),
+    
   ];
 };
 const projectCreateRules = function () {
