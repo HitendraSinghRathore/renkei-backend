@@ -11,7 +11,6 @@ async function authMiddleware(req, res, next) {
   const accessToken = authHeader && authHeader.split(' ')[1];
   const refreshToken = req.cookies.refreshToken; 
   if (!accessToken && !refreshToken) {
-    // if no token provided, return 401
     return res.status(401).json({ msg: 'No token provided' , redirect: true });
   }
   try {

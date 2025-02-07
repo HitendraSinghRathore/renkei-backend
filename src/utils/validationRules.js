@@ -128,7 +128,7 @@ const projectCreateRules = function () {
       .custom((value) => {
         let parsed;
         try {
-          parsed = JSON.parse(value);
+          parsed = JSON.parse(JSON.stringify(value));
         } catch (err) {
           throw new Error('Project content must be a valid JSON');
         }
