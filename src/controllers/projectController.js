@@ -26,7 +26,7 @@ async function getProjects(req, res, next) {
         { 'collaborators.user': req.user.id },
       ];
     }
-    console.log(`Query created for lookup ${query}`);
+    console.log(`Query created for lookup %o`,query);
     const [totalCount, projectsList] = await Promise.all([
       Project.countDocuments(query),
       Project.find(query)
