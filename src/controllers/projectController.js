@@ -126,7 +126,8 @@ async function getProject(req, res, next) {
             name: project.name,
             createdAt: project.createdAt,
             updatedAt: project.updatedAt,
-            content: project.content
+            content: project.content,
+            owner: project.owner.toString(),
         };
         console.log('Project details fetched successfully');
         return res.status(200).json({  data: projectDetails });
