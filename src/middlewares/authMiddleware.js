@@ -40,13 +40,11 @@ async function authMiddleware(req, res, next) {
 
       try {
         const decodedUser = jwt.verify(refreshToken, config.get('jwtRefreshSecret'));
-        console.log('Refresh token verified with user id: %o', decodedUser);
         const updatedUser = await User.findOneAndUpdate(
           { _id: decodedUser.id},
           { $set: { 'refreshToken.token': generateRefreshToken(decodedUser), 'refreshToken.expiresAt': new Date(Date.now() + 6 * 60 * 60 * 1000) } },
           { new: true } 
         );
-        console.log('Updated user %o', updatedUser);
         if (!updatedUser) {
           return res.status(401).json({ msg: 'Invalid refresh token', redirect: true });
         }
