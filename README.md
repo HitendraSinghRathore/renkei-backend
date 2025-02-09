@@ -115,7 +115,7 @@ passport.use(new GoogleStrategy({
 
 ```bash
 
-git clone [https://github.com/yourusername/renkei-backend.git](https://www.google.com/search?q=https://github.com/yourusername/renkei-backend.git)
+git clone https://github.com/HitendraSinghRathore/renkei-backend.git
 cd renkei-backend
 ```
 ---
