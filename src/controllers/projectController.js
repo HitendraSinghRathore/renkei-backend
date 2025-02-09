@@ -289,7 +289,8 @@ async function deleteProject(req, res, next) {
   console.log('Deleting project route called');
   try {
     const project = req.project;
-    await project.remove();
+    console.log('Deleting project %o', project);
+    await project.deleteOne();
 
     const projectId = project._id.toString();
     const io = getIO();
