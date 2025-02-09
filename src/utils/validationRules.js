@@ -92,12 +92,11 @@ const projectFetchRules = function () {
       .withMessage('Project name must be between 2 and 50 characters'),
 
     query('status')
-      .optional()
       .trim()
       .notEmpty()
       .withMessage('Project status is required')
-      .isLength({ min: 2, max: 50 })
-      .withMessage('Project status must be between 2 and 50 characters'),
+      .isIn(['all', 'owned', 'shared'])
+      .withMessage('Project status must be one of all, owned or shared'),
 
     query('page')
       .optional()

@@ -14,13 +14,13 @@ async function getProjects(req, res, next) {
     if (name) {
       query.name = { $regex: name, $options: 'i' };
     }
-    if (status) {
+    if (status && status !== 'all') {
       if (status === 'owned') {
         query.owner = req.user.id;
       } else if (status === 'shared') {
         query['collaborators.user'] = req.user.id;
       }
-    } else {
+    } else if(status === 'all') {
       query.$or = [
         { owner: req.user.id },
         { 'collaborators.user': req.user.id },
