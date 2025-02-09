@@ -124,24 +124,24 @@ const projectCreateRules = function () {
     body('content')
       .notEmpty()
       .withMessage('Project content is required')
-      .custom((value) => {
-        let parsed;
-        try {
-          parsed = JSON.parse(JSON.stringify(value.content));
-        } catch (err) {
-          throw new Error('Project content must be a valid JSON');
-        }
-        const requiredFields = ['elements', 'appState', 'scrollToContent'];
-        requiredFields.forEach((field) => {
-          if (!(field in parsed)) {
-            throw new Error(`Project content must include '${field}' field`);
-          }
-        });
-        if (!Array.isArray(parsed.elements)) {
-          throw new Error(`'elements' field must be an array`);
-        }
+      .custom((content) => {
+    if (typeof content !== 'object' || content === null) {
+      throw new Error('Project content must be a valid object');
+    }
 
-        return true;
+    const requiredFields = ['elements', 'appState', 'scrollToContent'];
+
+    requiredFields.forEach((field) => {
+      if (content[field] === undefined) {
+        throw new Error(`Project content must include '${field}' field`);
+      }
+    });
+
+    if (!Array.isArray(content.elements)) {
+      throw new Error(`'elements' field must be an array`);
+    }
+
+    return true;
       }),
   ];
 };
