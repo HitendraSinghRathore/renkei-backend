@@ -34,6 +34,8 @@ The Renkei backend is designed to handle real-time collaboration and secure user
 - **express-validator**: Request data validation
 - **MongoDB**: NoSQL database
 - **Passport.js**: Authentication middleware (Google OAuth integration)
+- **Docker**: Used to create build images and deploy to render using github CI/CD with actions
+ 
 
 ---
 
