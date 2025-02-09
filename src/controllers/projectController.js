@@ -247,7 +247,7 @@ async function shareProject(req, res, next) {
     
     project.collaborators = users.map(user => {
       return {
-        user: mongoose.Types.ObjectId(user.id),
+        user: new mongoose.Types.ObjectId(user.id),
         access: user.access
       };
     });
