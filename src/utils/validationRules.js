@@ -126,6 +126,7 @@ const projectCreateRules = function () {
       .withMessage('Project content is required')
       .custom((value) => {
         let parsed;
+        console.log('starting chnages');
         console.log('Parsed value %o', value);
         try {
           parsed = JSON.parse(JSON.stringify(value));
