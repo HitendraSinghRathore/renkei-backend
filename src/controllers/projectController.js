@@ -121,12 +121,23 @@ async function getProject(req, res, next) {
         if(!project) {
             return res.status(404).json({ msg: 'Project not found' });
         }
+        let access = ACESSS_CONSTANTS.READ;
+        if(project.owner._id.toString() === req.user.id.toString()) {
+            access = ACESSS_CONSTANTS.WRITE;
+        } else {
+            const collab = project.collaborators.find((collab) => collab.user.toString() === req.user.id.toString() );
+            if(collab) {
+                access = collab.access;
+            }
+        }
+
         const projectDetails = {
             id: project._id,
             name: project.name,
             createdAt: project.createdAt,
             updatedAt: project.updatedAt,
             content: project.content,
+            access: access,
             owner: project.owner.toString(),
         };
         console.log('Project details fetched successfully');
