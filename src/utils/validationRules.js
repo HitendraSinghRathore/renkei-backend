@@ -156,11 +156,24 @@ const projectUpdateRules = function () {
       
       body('content')
       .optional()
-      .isJSON()
-      .withMessage('Project content must be a valid JSON')
-      .custom((value) => {
-        const keys = ['elements', 'appState', 'scrollToContent'];
-        return keys.every(key => key in value);
+      .custom((content) => {
+        if (typeof content !== 'object' || content === null) {
+          throw new Error('Project content must be a valid object');
+        }
+  
+      const requiredFields = ['elements', 'appState', 'scrollToContent'];
+  
+      requiredFields.forEach((field) => {
+        if (content[field] === undefined) {
+          throw new Error(`Project content must include '${field}' field`);
+        }
+      });
+  
+      if (!Array.isArray(content.elements)) {
+        throw new Error(`'elements' field must be an array`);
+      }
+  
+      return true;
       })
       .withMessage('Project content must include all the required fields')
   ];
