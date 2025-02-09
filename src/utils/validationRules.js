@@ -126,24 +126,18 @@ const projectCreateRules = function () {
       .withMessage('Project content is required')
       .custom((value) => {
         let parsed;
-        console.log('starting chnages');
-        console.log('Parsed value %o', value);
         try {
-          parsed = JSON.parse(JSON.stringify(value));
+          parsed = JSON.parse(JSON.stringify(value.content));
         } catch (err) {
           throw new Error('Project content must be a valid JSON');
         }
         const requiredFields = ['elements', 'appState', 'scrollToContent'];
         requiredFields.forEach((field) => {
-          console.log('Checking field', field);
           if (!(field in parsed)) {
-            console.log('Sample field to check %o', parsed[field]);
             throw new Error(`Project content must include '${field}' field`);
           }
         });
-        console.log('Checking if ekement is array');
         if (!Array.isArray(parsed.elements)) {
-          console.log('Sample array to check %o', parsed.elements);
           throw new Error(`'elements' field must be an array`);
         }
 
