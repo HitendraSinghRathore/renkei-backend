@@ -125,11 +125,11 @@ const projectCreateRules = function () {
       .notEmpty()
       .withMessage('Project content is required')
       .custom((content) => {
-      if (typeof content !== 'object' || content === null) {
+      if (content === null) {
         throw new Error('Project content must be a valid object');
       }
 
-    return true;
+      return true;
       }),
   ];
 };
